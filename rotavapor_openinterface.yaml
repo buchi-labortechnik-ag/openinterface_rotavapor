@@ -1,0 +1,1308 @@
+openapi: 3.0.1
+info:
+  title: BUCHI OpenInterface
+  x-logo:
+    url: https://buchiointf.s3-eu-west-1.amazonaws.com/logo.png
+  description: >
+    BUCHI’s OpenInterface provides full and well documented access to all data
+    an instrument produces and consumes. It provides approximately the same
+    amount of functionality as can be accessed via the device’s on-screen menu.
+
+    More information about how to use OpenInterface you can find on [GitHub](https://github.com/buchi-labortechnik/openinterface-rotavapor/)
+  version: 1.0.0
+  contact:
+    url: 'https://www.buchi.com'
+    email: buchi@buchi.com
+servers:
+  - url: /api/v1
+tags:
+  - name: info
+    description: 'Information about the device'
+  - name: process
+    description: 'Current process data and control'
+  - name: settings
+    description: 'Device settings'
+  - name: logs
+    description: 'Recent warnings and errors'
+  - name: health
+    description: 'Health related data like leak test results'
+  - name: webhooks
+    description: 'Callack registrations'
+paths:
+
+  # Instrument information
+  /info:
+    get:
+      summary: 'Information about the connected instrument'
+      tags:
+      - info
+      description: 'This endpoint is used to get all available information about the connected instrument.'
+      operationId: getInfo
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Info'
+
+  # Process control
+  /process:
+    get:
+      summary: 'Current instrument status'
+      description: 'This endpoint is used to get current instrument status.'
+      tags:
+      - process
+      operationId: getProcess
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Process'
+    put:
+      summary: 'Change current instrument status'
+      description: 'This endpoint is used to change current instrument status.'
+      tags:
+      - process
+      operationId: changeProcess
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Process'
+      parameters:
+        - $ref: '#/components/parameters/StrictFlag'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadParameters'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '413':
+          $ref: '#/components/responses/RequestTooBig'
+        '415':
+          $ref: '#/components/responses/BadMediaType'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Process'
+
+  # Settings management
+  /settings:
+    get:
+      summary: 'Current instrument settings'
+      description: 'This endpoint is used to get current instrument settings.'
+      tags:
+      - settings
+      operationId: getSettings
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Settings'
+    put:
+      summary: 'Change current instrument settings'
+      description: 'This endpoint is used to change current instrument settings.'
+      tags:
+      - settings
+      operationId: changeSettings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      parameters:
+        - $ref: '#/components/parameters/StrictFlag'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadParameters'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '413':
+          $ref: '#/components/responses/RequestTooBig'
+        '415':
+          $ref: '#/components/responses/BadMediaType'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Settings'
+  /settings/reset:
+    post:
+      summary: 'Reset to default'
+      description: 'This endpoint is used to reset settings to default.'
+      tags:
+      - settings
+      operationId: resetSettings
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Settings'
+
+  # Log management
+  /logs:
+    get:
+      summary: 'Current logs'
+      description: 'This endpoint is used to get current logs.'
+      tags:
+      - logs
+      operationId: getLogs
+      # TODO: filters? time range? modules: bath|pump ?
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Log'
+    delete:
+      summary: 'Clear logs'
+      description: 'This endpoint is used to clear logs.'
+      tags:
+      - logs
+      operationId: clearLogs
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Empty'
+
+  # Health managements
+  /health:
+    get:
+      summary: 'Current health status'
+      description: 'This endpoint is used to get current health status.'
+      tags:
+      - health
+      operationId: getHealth
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Health'
+    delete:
+      summary: 'Clear health status'
+      description: 'This endpoint is used to clear health status.'
+      tags:
+      - health
+      operationId: deleteHealth
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Empty'
+
+  # Webhook managements
+  /webhooks:
+    get:
+      summary: 'List of webhook subscriptions'
+      description: 'This endpoint is used to get webhook subscriptions.'
+      tags:
+      - webhooks
+      operationId: getWebhookList
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Webhooks'
+    post:
+      summary: 'Create new webhook subscription'
+      description: 'This endpoint is used to create new webhook subscription.'
+      tags:
+      - webhooks
+      operationId: createWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Webhook'
+      parameters:
+        - $ref: '#/components/parameters/StrictFlag'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadParameters'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          $ref: '#/components/responses/WebhookAlreadyExists'
+        '413':
+          $ref: '#/components/responses/RequestTooBig'
+        '415':
+          $ref: '#/components/responses/BadMediaType'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Webhook'
+    delete:
+      summary: 'Delete all webhook subscriptions'
+      description: 'This endpoint is used to delete all webhook subscriptions.'
+      tags:
+      - webhooks
+      operationId: deleteAllWebhooks
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Webhooks'
+  /webhooks/{name}:
+    parameters:
+    - name: name
+      in: path
+      required: true
+      description: 'Webhook name'
+      schema:
+        type: string
+    get:
+      summary: 'Get webhook subscription'
+      description: 'This endpoint is used to get webhook subscription.'
+      tags:
+      - webhooks
+      operationId: getWebhook
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/WebhookNotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Webhook'
+    put:
+      summary: 'Change current webhook subscription'
+      description: 'This endpoint is used to change existing webhook subscription.'
+      tags:
+      - webhooks
+      operationId: changeWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Webhook'
+      parameters:
+        - $ref: '#/components/parameters/StrictFlag'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadParameters'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '413':
+          $ref: '#/components/responses/RequestTooBig'
+        '415':
+          $ref: '#/components/responses/BadMediaType'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Webhook'
+    delete:
+      summary: 'Delete webhook subscription'
+      description: 'This endpoint is used to delete webhook subscription.'
+      tags:
+      - webhooks
+      operationId: deleteWebhook
+      responses:
+        '400':
+          $ref: '#/components/responses/UnexpectedBody'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/WebhookNotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '200':
+          $ref: '#/components/responses/Empty'
+
+
+components:
+  parameters:
+    StrictFlag:
+      name: strict
+      in: query
+      description: 'Flag to check unknown fileds in the body, if false then unknown fields are just ignored.'
+      required: false
+      schema:
+        type: boolean
+        default: true
+  schemas:
+    Error:
+      type: object
+      description: 'Custom Error information.'
+      properties:
+        error:
+          type: string
+          description: 'Error message.'
+          readOnly: true
+        # TODO: error code?
+
+    Info:
+      type: object
+      description: 'Device information.'
+      required:
+        - systemClass
+        - systemLine
+        - systemName
+        - controller
+      properties:
+        systemClass:
+          type: string
+          readOnly: true
+          description: 'Type of device, e.g. Rotavapor, Lyovapor, etc.'
+        systemLine:
+          type: string
+          readOnly: true
+          description: 'System line, e.g. R-100, R-300, etc.'
+        systemName:
+          type: string
+          readOnly: true
+          description: 'User configurable system name.'
+        controller:
+          $ref: '#/components/schemas/ControllerInfo'
+        bath:
+          $ref: '#/components/schemas/BathInfo'
+        chiller:
+          $ref: '#/components/schemas/ChillerInfo'
+        rotavapor:
+          $ref: '#/components/schemas/RotavaporInfo'
+        pump:
+          $ref: '#/components/schemas/PumpInfo'
+        vacubox:
+          $ref: '#/components/schemas/VacuboxInfo'
+    SubComponentInfo:
+      type: object
+      description: 'Information every device provides.'
+      required:
+        - model
+        - serial
+        - firmware
+        - powerOnHours
+        - usageHours
+      properties:
+        model:
+          type: string
+          readOnly: true
+          description: 'Device Model.'
+        serial:
+          type: string
+          readOnly: true
+          description: 'Serial Number.'
+        firmware:
+          type: string
+          readOnly: true
+          description: 'Firmware version.'
+        powerOnHours:
+          type: integer
+          readOnly: true
+          description: 'Total power on hours.'
+        usageHours:
+          type: integer
+          readOnly: true
+          description: 'Total active operating hours.'
+    ControllerInfo:
+      description: 'Controller/Interface info'
+      allOf:
+        - $ref: '#/components/schemas/SubComponentInfo'
+        - type: object
+          required:
+            - runCounters
+          properties:
+            runCounters:
+              type: object
+              description: 'Number of starts per mode.'
+              required:
+                - totalRuns
+                - manual
+                - timer
+                - continuous
+                - solvent
+                - method
+                - autoDest
+                - cloudDest
+                - drying
+                - leakTest
+                - calibration
+              properties:
+                totalRuns:
+                  type: integer
+                  readOnly: true
+                  description: 'Total number of starts.'
+                manual:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts in manual mode.'
+                timer:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts in timer mode.'
+                continuous:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts in continuous mode.'
+                solvent:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts using the solvent library.'
+                method:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts using a method.'
+                autoDest:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts in AutoDest mode.'
+                cloudDest:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts using CloudDest mode.'
+                drying:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of starts using Drying mode.'
+                leakTest:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of leak tests.'
+                calibration:
+                  type: integer
+                  readOnly: true
+                  description: 'Number of calibration runs.'
+    BathInfo:
+      description: 'Heathing Bath information. Only present if a heating bath is attached'
+      allOf:
+        - $ref: '#/components/schemas/SubComponentInfo'
+        - type: object
+          required:
+            - hoursOver190C
+          properties:
+            hoursOver190C:
+              type: integer
+              readOnly: true
+              description: 'Number of operating hours above 190°C'
+    ChillerInfo:
+      description: 'Chiller information. Only present if a chiller is attached.'
+      allOf:
+        - $ref: '#/components/schemas/SubComponentInfo'
+        - type: object
+          required:
+            - antiCoolingLoops
+          properties:
+            antiCoolingLoops:
+              type: integer
+              readOnly: true
+              description: 'Number of cycles where the chiller is heating.'
+    RotavaporInfo:
+      description: 'Rotavapor information. Only present if a Rotavapor is attached.'
+      allOf:
+        - $ref: '#/components/schemas/SubComponentInfo'
+        - type: object
+          required:
+            - rotationHours
+            - liftMoves
+          # KOEM: in case of manual lift, do we have info about lift movements?
+          properties:
+            rotationHours:
+              type: integer
+              readOnly: true
+              description: 'Total number of hours rotating.'
+            liftMoves:
+              type: integer
+              readOnly: true
+              description: 'Total number of lift moves.'
+    PumpInfo:
+      description: 'Pump information. Only present if a pump is attached.'
+      allOf:
+        - $ref: '#/components/schemas/SubComponentInfo'
+        - type: object
+          required:
+            - module1
+          properties:
+            module1:
+              $ref: '#/components/schemas/PumpModuleInfo'
+            module2:
+              $ref: '#/components/schemas/PumpModuleInfo'
+    PumpModuleInfo:
+      type: object
+      description: 'Pump module information.'
+      required:
+        - switchOn
+        - overCurrent
+        - maxCurrent
+        - maxTemperature
+      properties:
+        switchOn:
+          type: integer
+          readOnly: true
+          description: 'Total number of active cycles.'
+        overCurrent:
+          type: number
+          readOnly: true
+          description: 'Number of over-current fault detections.'
+        maxCurrent:
+          type: number
+          readOnly: true
+          description: 'Max current of the motor driver FIXME: in Ampers?'
+        maxTemperature:
+          type: number
+          readOnly: true
+          description: 'Max temperature of the motor driver FIXME: in Celsuis degrees?'
+    VacuboxInfo:
+      description: 'VacuBox information. Only present if a VacuBox is attached.'
+      allOf:
+        - $ref: '#/components/schemas/SubComponentInfo'
+
+    Process:
+      type: object
+      description: 'Current process'
+      properties:
+        heating:
+          type: object
+          description: 'Heating related parameters'
+          properties:
+            set:
+              type: number
+              description: 'Heating set point in Celsius degrees.'
+              minimum: 0
+              maximum: 220
+            act:
+              type: number
+              description: 'Actual heating temperature in Celsius degrees.'
+              readOnly: true
+            isRunning:
+              type: boolean
+              description: 'Heating ON/OFF status.'
+              # readOnly: true
+        cooling:
+          type: object
+          description: 'Cooling related parameters'
+          properties:
+            set:
+              type: number
+              description: 'Cooling set point in Celsius degrees.'
+              minimum: -10
+              maximum: 25
+            act:
+              type: number
+              description: 'Actual cooling temperature in Celsius degrees.'
+              readOnly: true
+            isRunning:
+              type: boolean
+              description: 'Cooling ON/OFF status.'
+            coolantValveOpen:
+              type: boolean
+              description: 'Coolant valve open/closed flag.'
+              readOnly: true
+        vacuum:
+          type: object
+          description: 'Vacuum related parameters.'
+          properties:
+            set:
+              type: number
+              description: 'Pressure set point in millibars.'
+              minimum: 0
+              maximum: 1300
+            act:
+              type: number
+              description: 'Actual pressure value in millibars.'
+              readOnly: true
+            isRunning:
+              type: boolean
+              description: 'Vacuum ON/OFF status.'
+            aerateValveOpen:
+              type: boolean
+              description: 'Aerate valve open/closed flag.'
+              readOnly: true
+            vacuumValveOpen:
+              type: boolean
+              description: 'Vacuum valve open/closed flag.'
+              readOnly: true
+            powerPercentAct:
+              type: integer
+              description: 'Actual pump power in percent.'
+              readOnly: true
+              minimum: 0
+              maximum: 100
+            powerPercentSet:
+              type: integer
+              description: 'Pump power set point in percent. Cannot be overwritten when controlled by VacuBox.'
+              minimum: 10
+              maximum: 100
+        rotation:
+          type: object
+          description: 'Rotation related parameters'
+          properties:
+            set:
+              type: number
+              description: 'Rotation speed in rounds per minute.'
+              readOnly: true
+              minimum: 0
+              maximum: 300
+            act:
+              type: number
+              description: 'Actual rotation speed in rounds per minute.'
+              minimum: 10
+              maximum: 280
+            directionInversed:
+              type: boolean
+              readOnly: true
+              description: 'Flag of inverse direction.'
+            isRunning:
+              type: boolean
+              description: 'Rotation ON/OFF status.'
+        lift:
+          type: object
+          description: 'Evaporating flask lift related parameters.'
+          properties:
+            set:
+              type: number
+              description: 'Set point in millimeters.'
+              minimum: 0
+              maximum: 220
+            act:
+              type: number
+              description: 'Actual value in millimeters.'
+              readOnly: true
+            limit:
+              type: number
+              description: 'Absolute maximum value in millimeters.'
+              minimum: 20
+              maximum: 220
+              readOnly: true
+        program:
+          description: 'The program currently in use.'
+          oneOf:
+            - $ref: '#/components/schemas/Manual'
+            - $ref: '#/components/schemas/Timer'
+            - $ref: '#/components/schemas/Solvent'
+            - $ref: '#/components/schemas/Method'
+            - $ref: '#/components/schemas/AutoDest'
+            - $ref: '#/components/schemas/CloudDest'
+            - $ref: '#/components/schemas/Dry'
+            - $ref: '#/components/schemas/Calibration'
+            - $ref: '#/components/schemas/TightnessTest'
+          discriminator:
+            propertyName: type
+        globalStatus:
+          type: object
+          description: 'Global instrument status.'
+          properties:
+            onHold:
+              type: boolean
+              description: 'Global ON HOLD status.'
+            currentError:
+              type: integer
+              description: 'Current error code.'
+            isRunning:
+              type: boolean
+              description: 'Global process ON/OFF status.'
+    Program:
+      type: object
+      description: 'Common base of all programs.'
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: 'The program type.'
+    Manual:
+      description: 'Manual mode and its parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+    Timer:
+      description: 'Timer mode parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+        - type: object
+          required:
+            - set
+            - remaining
+          properties:
+            set:
+              type: integer
+              description: 'Set time value in minutes.'
+              minimum: 1
+              maximum: 999
+            remaining:
+              type: integer
+              description: 'Remaining time in minutes.'
+              readOnly: true
+    Solvent:
+      description: 'Manual mode parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+        - type: object
+          required:
+            - solventName
+          properties:
+            solventName:
+              type: string
+              description: 'Solvent name.'
+    Method:
+      description: 'Method mode and its parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+        - type: object
+          required:
+            - methodName
+          properties:
+            methodName:
+              type: string
+              description: 'Method name.'
+    AutoDest:
+      description: 'AutoDest parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+    CloudDest:
+      description: 'CloudDest mode and its parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+        - type: object
+          required:
+            - mode
+          properties:
+            mode:
+              type: string
+              description: 'Type of program.'
+              enum:
+                - gentle
+                - fast
+                - endDetection
+                # this might still change!!
+    Dry:
+      description: 'Drying parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+    Calibration:
+      description: 'Calibration parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+    TightnessTest:
+      description: 'TightnessTest parameters.'
+      allOf:
+        - $ref: '#/components/schemas/Program'
+    Settings:
+      type: object
+      description: 'Device settings.'
+      properties:
+        network:
+          type: object
+          description: 'Network settings.'
+          properties:
+            dhcp:
+              type: boolean
+              description: 'Use DHCP instead of fixed IP configuration.'
+            ip:
+              type: string
+              format: ipv4
+              description: 'Device IP address.'
+            subnet:
+              type: string
+              format: ipv4
+              description: 'Network mask.'
+            gateway:
+              type: string
+              format: ipv4
+              description: 'Default gateway address.'
+            dns:
+              type: string
+              format: ipv4
+              description: 'Primary DNS server address.'
+            cloudIp:
+              type: string
+              format: ipv4
+              description: 'Cloud Server IP address.'
+            cloudEnabled:
+              type: boolean
+              description: 'Use BUCHI cloud instead of custom cloud.'
+        display:
+          type: object
+          description: 'Interface display settings.'
+          properties:
+            language:
+              type: string
+              description: 'Choice of language used for Interface display.'
+              enum:
+              - Eng
+              - Ger
+              - Fre
+              - Ita
+              - Spa
+              - Rus
+              - Port
+              - Jap
+              - Chin
+              - Kor
+              - Indones
+              # KOEM: We should really use proper 3 letter iso codes or even better switch to the two letter codes
+            brightness:
+              type: integer
+              description: 'Display illumination level in %'
+              minimum: 0
+              maximum: 100
+            units:
+              type: object
+              description: 'Choice of units for Interface display.'
+              properties:
+                temperature:
+                  type: string
+                  description: 'Choice of unit for indication of temperatures.'
+                  enum:
+                  - Celsius
+                  - Fahrenheit
+                  - Kelvin
+                pressure:
+                  type: string
+                  description: 'Choice of unit for indication of (negative) pressure.'
+                  enum:
+                  - hPa
+                  - mBar
+                  - torr
+                  - mmhg
+        sounds:
+          type: object
+          description: 'Sound settings.'
+          properties:
+            buttonTone:
+              type: boolean
+              description: 'A beep sounds when a function button or the navigation control is pressed.'
+            playSoundOnFinish:
+              type: boolean
+              description: 'An audible signal is sounded after automatic or manual termination of distillation.'
+        vacuum:
+          type: object
+          description: 'Vacuum related settings.'
+          properties:
+            pressureHysteresis:
+              type: number
+              description: 'Entry of figure for the maximum allowable difference between the actual vacuum and the specified figure before the vacuum pump switches on again.'
+              minimum: 0
+              maximum: 200
+            altitude:
+              type: number
+              description: 'Altitude of location above mean sea level FIXME: in meters?'
+              minimum: 0
+              maximum: 4000
+            maxPermPressure:
+              type: number
+              description: 'Maximim pressure level present in the system.'
+              minimum: 0
+              maximum: 1300
+            maxPumpOutput:
+              type: integer
+              description: 'Maximum pump speed in %'
+              minimum: 0
+              maximum: 100
+            ventOnFinish:
+              type: boolean
+              description: 'System is vented after automatic or manual termination of distillation.'
+        rotation:
+          type: object
+          description: 'Rotation related settings.'
+          properties:
+            startRotationOnStart:
+              type: boolean
+              description: 'Evaporating flask starts rotating when distillation is started.'
+            stopRotationOnFinish:
+              type: boolean
+              description: 'Evaporating flask stops rotating after automatic or manual termination of distillation.'
+        heating:
+          type: object
+          description: 'Heating related settings.'
+          properties:
+            lockActive:
+              type: boolean
+              description: 'Temperature lock is active.'
+            maxTemperature:
+              type: number
+              description: 'Maximum temperature limitation in Celsius degrees.'
+              enum:
+              - 95
+              - 180
+              - 220
+            stopHeatingOnFinish:
+              type: boolean
+              description: 'Heating of heating bath stops after automatic or manual termination of distillation.'
+        cooling:
+          type: object
+          description: 'Cooling related settings.'
+          properties:
+            stopCoolingOnFinish:
+              type: boolean
+              description: 'The Recirculating Chiller automatically switches off after automatic or manual termination of distillation.'
+        lift:
+          type: object
+          description: 'Lift related settings.'
+          properties:
+            depthStop:
+              type: number
+              description: 'Depth stop limit in millimeters.'
+              minimum: 20
+              maximum: 220
+            immerseOnStart:
+              type: boolean
+              description: 'Evaporating flask is automatically immersed in the heating bath when distillation is started.'
+            liftOutFlaskOnFinish:
+              type: boolean
+              description: 'Evaporating flask is automatically lifted out of the heating bath after automatic or manual termination of distillation.'
+        program:
+          type: object
+          description: 'Program related settings.'
+          properties:
+            eco:
+              type: object
+              description: 'ECO mode settings.'
+              properties:
+                isEnabled:
+                  type: boolean
+                  description: 'ECO mode enabled flag.'
+                activationAfterMins:
+                  type: integer
+                  description: 'Activation delay in minutes.'
+                  minimum: 5
+                  maximum: 100
+                heatingBathTemperature:
+                  type: number
+                  description: 'Heating bath temperature reduction in Celsius degrees.'
+                  minimum: 3
+                  maximum: 200
+                coolantTemperature:
+                  type: number
+                  description: 'Coolant temperature increase in Celsius degrees.'
+                  minimum: 3
+                  maximum: 50
+    Log:
+      type: array
+      description: 'Recent log entries.'
+      items:
+        type: object
+        description: Log Entry
+        properties:
+          dateTime:
+            type: string
+            format: date-time
+            description: 'Date and time of the occurence in ISO 8601 format, e.g. 2017-03-13T15:17:03.'
+            readOnly: true
+          dateTimeUnix:
+            type: integer
+            description: 'Time in seconds since 1.1.1970'
+            readOnly: true
+          operatingTime:
+            type: integer
+            description: 'Time in milliseconds since device start.'
+            readOnly: true
+          number:
+            type: integer
+            description: 'Error number FIXME: is it always error? any other codes?'
+            readOnly: true
+          message:
+            type: string
+            description: 'Error message FIXME: is it always error message?'
+            readOnly: true
+          status:
+            type: integer
+            description: 'Device status code.'
+            readOnly: true
+    Health:
+      type: object
+      description: 'Health test results.'
+      properties:
+        leakTests:
+          type: array
+          description: 'Recent leak tests.'
+          items:
+            type: object
+            description: 'Leak test.'
+            properties:
+              dateTime:
+                type: string
+                format: date-time
+                description: 'Date and time of the leak test in ISO 8601 format, e.g. 2017-03-13T15:17:03'
+                readOnly: true
+              dateTimeUnix:
+                type: integer
+                description: 'Time in seconds since 1.1.1970'
+                readOnly: true
+              operatingTime:
+                type: integer
+                description: 'Time in milliseconds since device start.'
+                readOnly: true
+              results:
+                type: object
+                description: 'Test results.'
+                properties:
+                  finalPressure:
+                    type: number
+                    description: 'Pressure at the test end in millibars.'
+                    readOnly: true
+    Webhook:
+      type: object
+      description: 'TODO: Webhook description'
+      required:
+        - event
+        - url
+      properties:
+        name:
+          type: string
+          description: 'Name of the webhook subscription.'
+          # used in POST /webhooks readOnly: true
+        event:
+          type: string
+          description: 'Name of the event that will trigger this webhook.'
+          enum:
+          - ProcessData
+          - StatusChange_All
+          - StatusChange_Started
+          - StatusChange_Stopped
+          - StatusChange_Error
+        url:
+          type: string
+          format: uri
+          description: 'The target URL invoked when the event occurs.'
+        verb:
+          type: string
+          description: 'The HTTP verb to be used when invoking the target URL.'
+          # FIXME: default: POST?
+          enum:
+            - GET
+            - PUT
+            - POST
+        payloadTemplate:
+          type: string
+          description: >-
+            The template of the payload to be sent to the webhook target. It can
+            contain placeholders. FIXME: list of placeholders or reference to docs!
+        additionalHeaders:
+          type: object
+          description: 'List of headers. Header values are allowed to contain placeholders FIXME: list of placeholders or reference'
+          additionalProperties:
+            type: string
+        disableCertCheck:
+          type: boolean
+          description: >-
+            Skip the TLS certificate valudation. Set this to true if your target
+            server uses a self-signed certificate or if there is no internet
+            connectivity. FIXME: if there is no Internet connectivity how webhook should work?
+
+  responses:
+    UnexpectedBody: # 400
+      description: 'Unexpected request body found.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadParameters: # 400
+      description: 'Bad parameter found.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized: # 401
+      description: 'User is unauthorized.'
+      content:
+        text/html:
+          schema:
+            type: object
+    Forbidden: # 403
+      description: 'User is unauthorized to access this resource.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    WebhookNotFound: # 404
+      description: 'No webhook found.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    WebhookAlreadyExists: # 409
+      description: 'Webhook already exists.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed: # 405
+      description: 'Any of non-supported method is used.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RequestTooBig: # 413
+      description: 'Request body is too big.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadMediaType: # 415
+      description: 'Request body is not JSON.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalError: # 500
+      description: 'Internal error occurred.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Info: # 200
+      description: 'Valid Info response.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Info'
+    Process: # 200
+      description: 'Valid Process response.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Process'
+    Settings: # 200
+      description: 'Valid Settings response.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Settings'
+    Log: # 200
+      description: 'Valid Log response.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Log'
+    Health: # 200
+      description: 'Valid Health response.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Health'
+    Webhooks: # 200
+      description: 'Valid Webhooks response'
+      content:
+        application/json:
+          schema:
+            type: array
+            # TODO: consider use names only here
+            items:
+              $ref: '#/components/schemas/Webhook'
+    Webhook: # 200
+      description: 'Valid Webhook response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Webhook'
+    Empty: # 200
+      description: 'Valid empty response'
+      content:
+        application/json:
+          schema:
+            type: object
+
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: 'A way to pass user credentials'
+
+security:
+  - BasicAuth: []
