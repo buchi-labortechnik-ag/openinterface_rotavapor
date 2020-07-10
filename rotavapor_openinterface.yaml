@@ -8,7 +8,7 @@ info:
     an instrument produces and consumes. It provides approximately the same
     amount of functionality as can be accessed via the device’s on-screen menu.
 
-    More information about how to use OpenInterface you can find on [GitHub](https://github.com/buchi-labortechnik/openinterface-rotavapor/)
+    More information about how to use OpenInterface you can find on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/)
   version: 1.0.0
   contact:
     url: 'https://www.buchi.com'

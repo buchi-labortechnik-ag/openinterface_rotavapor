@@ -2,7 +2,7 @@
 
 BUCHI’s OpenInterface provides full and well documented access to all data an instrument produces and consumes. It provides approximately the same amount of functionality as can be accessed via the device’s on-screen menu. 
 
-The OpenInterface is a RESTful HTTP Service that runs directly on the device. The API documentation is provided as an OpenAPI file in our [GitHub repository](https://github.com/buchi-labortechnik/rotavapor-openinterface-spec/blob/master/rotavapor_openinterface.yaml). A HTML doc generated from this file can be found at [BUCHI's developer website](https://developer.buchi.com/rotavapor/openinterface/doc/).
+The OpenInterface is a RESTful HTTP Service that runs directly on the device. The API documentation is provided as an OpenAPI file in our [GitHub repository](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml). A HTML doc generated from this file can be found at [BUCHI's developer website](https://developer.buchi.com/rotavapor/openinterface/doc/).
 
 Please follow the "Getting Started" chapter further down for an easier start. 
 
@@ -36,13 +36,13 @@ OpenInterface is disabled by default. For enabling it, use the I-300pro on-scree
 On your computer, open a web browser and enter the IP address of your system. A webpage that shows the current status of the OpenInterface should be displayed.
 
 ### API documentation
-The API documentation is provided as a OpenAPI document on [GitHub](https://github.com/buchi-labortechnik/rotavapor-openinterface-spec/blob/master/rotavapor_openinterface.yaml).
+The API documentation is provided as a OpenAPI document on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml).
 
 A HTML version of that document can be found on our [developer website](https://developer.buchi.com/rotavapor/openinterface/doc/).
 
 ### Explore the API
 
-Use [Postman](https://www.getpostman.com/) or it's open-source alternative [Insomnia](https://insomnia.rest/) for exploring the OpenInterface. Download and import the OpenInterface OpenApi file from [GitHub](https://github.com/buchi-labortechnik/rotavapor-openinterface-spec/blob/master/rotavapor_openinterface.yaml). Once imported, a few more things need to be configured:
+Use [Postman](https://www.getpostman.com/) or it's open-source alternative [Insomnia](https://insomnia.rest/) for exploring the OpenInterface. Download and import the OpenInterface OpenApi file from [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml). Once imported, a few more things need to be configured:
 
 - _Disable Certificate Validation:_ In Postman this can be done under File > Settings > General > SSL Certificate Validation
 
