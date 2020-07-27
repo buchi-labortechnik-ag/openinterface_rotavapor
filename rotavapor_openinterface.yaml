@@ -2,16 +2,16 @@ openapi: 3.0.1
 info:
   title: BUCHI OpenInterface
   x-logo:
-    url: https://buchiointf.s3-eu-west-1.amazonaws.com/logo.png
+    url: https://developer.buchi.digital/rotavapor/openinterface/doc/logo.png
   description: >
     BUCHI’s OpenInterface provides full and well documented access to all data
     an instrument produces and consumes. It provides approximately the same
     amount of functionality as can be accessed via the device’s on-screen menu.
 
-    More information about how to use OpenInterface you can find on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/)
+    More information about how to use OpenInterface you can find on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/) and [BUCHI's Developer Website](https://www.buchi.com/en/developer). A HTML version of this document can be found [here](https://developer.buchi.digital/rotavapor/openinterface/doc/index.html).
   version: 1.0.0
   contact:
-    url: 'https://www.buchi.com'
+    url: https://www.buchi.com/en/developer
     email: buchi@buchi.com
 servers:
   - url: /api/v1
