@@ -45,7 +45,7 @@ On your computer, open a web browser and enter the IP address of your system. A 
 ### API documentation
 The API documentation is provided as a OpenAPI document on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml). That document is mostly usable together with (OpenAPI tooling)[https://openapi.tools/]. For human consumtion we also provide this doc as a [HTML version](https://developer.buchi.digital/rotavapor/openinterface/doc/index.html).
 
-This API is rather simple and it might be more enjoyable to simply try it out instead of reading the docs.
+This API is rather simple and it might be more enjoyable to simply try it out first.
 
 ### Explore the API
 
