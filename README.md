@@ -1,10 +1,14 @@
 ## Introduction
 
-BUCHI’s OpenInterface provides full and well documented access to all data an instrument produces and consumes. It provides approximately the same amount of functionality as can be accessed via the device’s on-screen menu. 
+BUCHI’s OpenInterface provides full and well documented access to all data a BUCHI Rotavapor produces and consumes. It provides approximately the same amount of functionality as can be accessed via the device’s on-screen menu. 
 
-The OpenInterface is a RESTful HTTP Service that runs directly on the device. The API documentation is provided as an OpenAPI file in our [GitHub repository](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml). For easier readability we also provide this as [HTML doc](https://developer.buchi.digital/rotavapor/openinterface/doc/index.html).
+The OpenInterface is a RESTful HTTP Service that runs directly on the device. Apart from this readme file, the following resources are provided:
 
-Please follow the "Getting Started" chapter further down for an easier start. 
+* [HTML API Documentation](https://developer.buchi.digital/rotavapor/openinterface/doc/index.html)
+* [OpenAPI File](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml)
+* [Python Examples](https://github.com/buchi-labortechnik-ag/openinterface_examples_python)
+
+ 
 
 ## Common use cases
 
@@ -60,6 +64,9 @@ Use [Postman](https://www.getpostman.com/) or it's open-source alternative [Inso
 - _Change Authorization:_ For each request inside the collection, in the Authorization tab, change Type to 'Inherit auth from parent'
 
 Afterwards you should be able to use Postman for exploring the API.
+
+### Examples
+We provide a couple of python examples on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_examples_python).
 
 
 ## Authentication
