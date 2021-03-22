@@ -1,6 +1,6 @@
 ## Introduction
 
-BUCHI’s OpenInterface is the key to monitor and remotely access your BUCHI Rotavapor. It requires to connect the Rotavapor to a local area network (LAN) and provides approximately the same amount of functionality as the device’s on-screen menu.
+BUCHI’s OpenInterface is the key to monitor and remotely access your BUCHI Rotavapor. It requires to connect the Rotavapor to a local area network (LAN). OpenInterface provides approximately the same amount of functionality as the device’s on-screen menu.
 
 ![openinterface introduction](images/openinterface-introduction.jpg)
 
@@ -51,8 +51,8 @@ Either configure a fixed IP address in the I-300 Pro on-screen menu (Settings > 
 
 OpenInterface is disabled by default. For enabling it, use the I-300 Pro on-screen menu (Settings > Rotavapor Open Interface, see below). Take note of the passwords and restart the device: 
 
-- _Password read_: Username 'ro', read access only
-- _Password write_: Username 'rw', read and write/control access
+- _Password read_: Username `ro`, read access only
+- _Password write_: Username `rw`, read and write/control access
 
 ![I300 Pro enable OpenInterface](images/I300Pro-enable-openinterface.jpg)
 
@@ -67,15 +67,21 @@ The API documentation is provided as an OpenAPI document on [GitHub](https://git
 
 Use [Postman](https://www.getpostman.com/) or it's open-source alternative [Insomnia](https://insomnia.rest/) for exploring the OpenInterface. Download and import the OpenInterface OpenApi file from [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml). Once imported, a few more things need to be configured:
 
-- _Disable Certificate Verification:_ In Postman this can be done under File > Settings > General > SSL Certificate Verification
+- _Disable Certificate Verification:_
+  - Postman: File > Settings > General > SSL Certificate Verification
+  - Insomnia: Application > Preferences > Validate Certificates
 
-- _Enter Rotavapor IP Address:_ Change base URL to contain your Rotavapor's IP address under Edit Collection > Variables
+- _Enter Rotavapor IP Address:_ 
+  - Postman: Change base URL to contain your Rotavapor's IP address under Edit Collection > Variables
+  - Insomnia: Under Manage Environment, change "host" to your Rotavapor's IP address
 
-- _Add credentials:_ Under Edit Collection > Authentication choose Basic Auth, enter rw as user and the password that was shown on screen of the I-300 Pro at the time you've enabled the OpenInterface.
+- _Add credentials:_
+  - Postman: Under Edit Collection > Authentication choose Basic Auth, enter rw as user and the password that was shown on screen of the I-300 Pro at the time you've enabled the OpenInterface.
+  - Insomnia: Under Manage Environment, replace _username_ and _password_ 
 
-- _Change Authorization:_ For each request inside the collection, in the Authorization tab, change Type to 'Inherit auth from parent'
+- _Change Authorization:_
+  - Postman: For each request inside the collection, in the Authorization tab, change Type to 'Inherit auth from parent'
 
-Afterwards you should be able to use Postman for exploring the API.
 
 ### Examples
 We provide a couple of Python examples on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_examples_python).
