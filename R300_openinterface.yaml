@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: BUCHI OpenInterface
+  title: BUCHI R300 OpenInterface
   x-logo:
     url: https://developer.buchi.digital/rotavapor/openinterface/doc/logo.png
   description: >
@@ -486,12 +486,22 @@ components:
         - $ref: '#/components/schemas/SubComponentInfo'
         - type: object
           required:
-            - antiCoolingLoops
+            - pumpHours
+            - compressorHours
+            - valveCounter
           properties:
-            antiCoolingLoops:
+            pumpHours:
               type: integer
               readOnly: true
-              description: Number of cycles where the chiller is heating.
+              description: Hours of operation of the compressor.
+            compressorHours:
+              type: integer
+              readOnly: true
+              description: Hours of operation of the compressor valve.
+            valveCounter:
+              type: integer
+              readOnly: true
+              description: Number of the compressor valve switches.
     RotavaporInfo:
       description: Rotavapor information. Only present if a Rotavapor is attached.
       allOf:
@@ -627,6 +637,10 @@ components:
               readOnly: true
               minimum: 0
               maximum: 100
+            running:
+              type: boolean
+              description: Vacuum ON/OFF status.
+              readOnly: true
         rotation:
           type: object
           description: Rotation related parameters
@@ -698,7 +712,8 @@ components:
               readOnly: true
             onHold:
               type: boolean
-              description: Global ON HOLD status.
+              description: Global ON HOLD status
+              readOnly: true
             foamActive:
               type: boolean
               description: foam is active.
@@ -735,9 +750,9 @@ components:
           properties:
             set:
               type: integer
-              description: Set time value in seconds. Needs to be a multiple of 60 seconds. If it isn't it's rounded down accordingly.
-              minimum: 1
-              maximum: 960
+              description: Set time value in seconds. Needs to be a multiple of 60. If it isn't it's rounded down accordingly.
+              minimum: 60
+              maximum: 16920
               multipleOf: 60
             remaining:
               type: integer
@@ -790,6 +805,22 @@ components:
       description: Drying parameters.
       allOf:
         - $ref: '#/components/schemas/Program'
+        - type: object
+          required:
+            - interval
+            - time
+          properties:
+            interval:
+              type: integer
+              description: Direction change interval time in seconds.
+              minimum: 5
+              maximum: 150
+            time:
+              type: integer
+              description: Set time value in seconds. Needs to be a multiple of 60. If it isn't it's rounded down accordingly.
+              minimum: 60
+              maximum: 34380
+              multipleOf: 60
     Calibration:
       description: Calibration parameters.
       allOf:
@@ -860,9 +891,15 @@ components:
                 - id
             brightness:
               type: integer
-              description: Display illumination level in %
+              description: Display illumination level in %.
               minimum: 0
               maximum: 100
+            utcOffset:
+              type: integer
+              description: UTC Offset in minutes.
+              minimum: -720
+              maximum: 840
+              multipleOf: 30
             units:
               type: object
               description: Choice of units for Interface display.
