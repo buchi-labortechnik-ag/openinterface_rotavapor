@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: BUCHI R300 OpenInterface
+  title: BUCHI R-300 OpenInterface
   x-logo:
     url: https://developer.buchi.digital/rotavapor/openinterface/doc/logo.png
   description: >
