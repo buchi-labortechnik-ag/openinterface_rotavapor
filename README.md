@@ -7,7 +7,7 @@ BUCHI’s OpenInterface is the key to monitor and remotely access your BUCHI Rot
 OpenInterface is a RESTful HTTP Service that runs directly on your BUCHI Rotavapor. Apart from this readme file, the following resources are available:
 
 * [HTML API Documentation](https://developer.buchi.digital/rotavapor/openinterface/doc/index.html)
-* [OpenAPI File](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml)
+* [OpenAPI File](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/R300_openinterface.yaml)
 * [Python Examples](https://github.com/buchi-labortechnik-ag/openinterface_examples_python)
 
  
