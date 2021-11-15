@@ -12,11 +12,14 @@ R-300:
 * [Python Examples](https://github.com/buchi-labortechnik-ag/openinterface_examples_python)
 
 R-220:
-* [HTML API Documentation](https://s3.eu-west-1.amazonaws.com/developer.buchi.digital/rotavapor/openinterface/doc/multi.html?prod=r-220)
-* [OpenAPI File](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/R300_openinterface.yaml)
+* [HTML API Documentation](https://developer.buchi.digital/rotavapor/openinterface/doc/multi.html?prod=r-220)
+* [OpenAPI File](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/R220_openinterface.yaml)
 * [Python Examples](https://github.com/buchi-labortechnik-ag/openinterface_examples_python)
 
- 
+Syncore Plus:
+* [HTML API Documentation](https://developer.buchi.digital/rotavapor/openinterface/doc/multi.html?prod=syncoreplus)
+* [OpenAPI File](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/SyncorePlus_openinterface.yaml)
+
 
 ## Common use cases
 
@@ -38,10 +41,13 @@ R-220:
 
 ## Hardware support
 ### BUCHI R-300
-BUCHI's Rotavapor R-300 line is a modular system. All current generation subdevices are supported, but an [Interface I-300 Pro](https://www.buchi.com/en/products/laboratory-evaporation/interface-i-300-pro) with VacuBox is always required.
+BUCHI's [Rotavapor R-300](https://www.buchi.com/en/products/instruments/rotavapor-r-300) line is a modular system. All current generation subdevices are supported, but an [Interface I-300 Pro](https://www.buchi.com/en/products/instruments/interfaces) with VacuBox is always required.
 
 ### BUCHI R-220
-The R-220 Pro is currently not supported. If a R-220 Pro is detected, the OpenInterface is disabled on the I-300 Pro. 
+The [R-220 Pro](https://www.buchi.com/en/products/instruments/rotavapor-r-220-pro) is supported.
+
+### SyncorePlus
+The [SyncorePlus](https://www.buchi.com/en/products/instruments/syncoreplus) is supported, but an [Interface I-300 Pro](https://www.buchi.com/en/products/instruments/interfaces) with VacuBox is always required.
 
 ## Getting started
 
@@ -67,7 +73,7 @@ On your computer, open a web browser and enter the IP address of your system. A 
 ![OpenInterface Browser](images/openinterface-browser.jpg)
 
 ### API documentation
-The API documentation is provided as an OpenAPI document on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/blob/master/rotavapor_openinterface.yaml). That document is mostly usable together with [OpenAPI tooling](https://openapi.tools/). For human consumtion we also provide the documentation as an [HTML version](https://developer.buchi.digital/rotavapor/openinterface/doc/index.html).
+The API documentation is provided as an OpenAPI document on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/). That document is mostly usable together with [OpenAPI tooling](https://openapi.tools/). For human consumtion we also provide the documentation as an [HTML version](https://developer.buchi.digital/rotavapor/openinterface/doc/multi.html).
 
 ### Explore the API
 

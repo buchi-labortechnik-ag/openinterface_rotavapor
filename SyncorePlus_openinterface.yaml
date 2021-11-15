@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: BUCHI R-300 OpenInterface
+  title: BUCHI OpenInterface for Syncore
   x-logo:
     url: https://developer.buchi.digital/rotavapor/openinterface/doc/logo.png
   description: >
@@ -8,7 +8,7 @@ info:
     an instrument produces and consumes. It provides approximately the same
     amount of functionality as can be accessed via the device’s on-screen menu.
 
-    More information about how to use OpenInterface you can find on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/) and [BUCHI's Developer Website](https://www.buchi.com/en/products/services/flux/developer). A HTML version of this document can be found [here](https://developer.buchi.digital/rotavapor/openinterface/doc/multi.html?prod=r-300).
+    More information about how to use OpenInterface you can find on [GitHub](https://github.com/buchi-labortechnik-ag/openinterface_rotavapor/) and [BUCHI's Developer Website](https://www.buchi.com/en/products/services/flux/developer). A HTML version of this document can be found [here](https://developer.buchi.digital/rotavapor/openinterface/doc/multi.html?prod=syncoreplus).
   version: 1.0.0
   contact:
     url: https://www.buchi.com/en/developer
@@ -21,9 +21,9 @@ tags:
   - name: process
     description: Start/stop process, vacuum, rotation, etc.
   - name: settings
-    description: Immerse lift on start, max pump output, stop heating on finish, etc.
+    description: Max pump output, stop heating on finish, etc.
   - name: messages
-    description: Message id, message text (e.g. overheated bath, blocked rotation, blocked lift)
+    description: Message id, message text
   - name: health
     description: Leak test results
   - name: webhooks
@@ -360,12 +360,10 @@ components:
           description: User configurable system name.
         controller:
           $ref: '#/components/schemas/ControllerInfo'
-        bath:
-          $ref: '#/components/schemas/BathInfo'
+        parallelEvaporator:
+          $ref: '#/components/schemas/ParallelEvaporatorInfo'
         chiller:
           $ref: '#/components/schemas/ChillerInfo'
-        rotavapor:
-          $ref: '#/components/schemas/RotavaporInfo'
         pump:
           $ref: '#/components/schemas/PumpInfo'
         vacubox:
@@ -419,10 +417,7 @@ components:
                 - solvent
                 - method
                 - autoDest
-                - cloudDest
-                - drying
                 - leakTest
-                - calibration
               properties:
                 totalRuns:
                   type: integer
@@ -452,14 +447,6 @@ components:
                   type: integer
                   readOnly: true
                   description: Number of starts in AutoDest mode.
-                cloudDest:
-                  type: integer
-                  readOnly: true
-                  description: Number of starts using CloudDest mode.
-                drying:
-                  type: integer
-                  readOnly: true
-                  description: Number of starts using Drying mode.
                 leakTest:
                   type: integer
                   readOnly: true
@@ -467,19 +454,6 @@ components:
                 calibration:
                   type: integer
                   readOnly: true
-                  description: Number of calibration runs.
-    BathInfo:
-      description: Heathing Bath information. Only present if a heating bath is attached
-      allOf:
-        - $ref: '#/components/schemas/SubComponentInfo'
-        - type: object
-          required:
-            - hoursOver190C
-          properties:
-            hoursOver190C:
-              type: integer
-              readOnly: true
-              description: Number of operating hours above 190°C
     ChillerInfo:
       description: Chiller information. Only present if a chiller is attached.
       allOf:
@@ -502,23 +476,23 @@ components:
               type: integer
               readOnly: true
               description: Number of the compressor valve switches.
-    RotavaporInfo:
-      description: Rotavapor information. Only present if a Rotavapor is attached.
+    ParallelEvaporatorInfo:
+      description: Parallel evaporator information. Only present if a parallel evaporator is attached.
       allOf:
         - $ref: '#/components/schemas/SubComponentInfo'
         - type: object
           required:
             - rotationHours
-            - liftMoves
+            - operatingTimeHeater
           properties:
             rotationHours:
               type: integer
               readOnly: true
               description: Total number of hours rotating.
-            liftMoves:
+            operatingTimeHeater:
               type: integer
               readOnly: true
-              description: Total number of lift moves.
+              description: Total number of hours heating.
     PumpInfo:
       description: Pump information. Only present if a pump is attached.
       allOf:
@@ -571,8 +545,8 @@ components:
             set:
               type: number
               description: Heating set point in Celsius degrees.
-              minimum: 0
-              maximum: 220
+              minimum: 20
+              maximum: 100
             act:
               type: number
               description: Actual heating temperature in Celsius degrees.
@@ -649,36 +623,16 @@ components:
               type: number
               description: Rotation speed in rounds per minute.
               minimum: 0
-              maximum: 280
+              maximum: 400
             act:
               type: number
               description: Actual rotation speed in rounds per minute.
               readOnly: true
-              minimum: 10
-              maximum: 280
+              minimum: 0
+              maximum: 400
             running:
               type: boolean
               description: Rotation ON/OFF status.
-        lift:
-          type: object
-          description: Evaporating flask lift related parameters.
-          properties:
-            set:
-              type: number
-              description: Set point in millimeters. For I-300pro this needs to be either 0 for the upper or 220 for the lower position.
-              multipleOf: 220
-              minimum: 0
-              maximum: 220
-            act:
-              type: number
-              description: Actual value in millimeters.
-              readOnly: true
-            limit:
-              type: number
-              description: Absolute maximum value in millimeters.
-              minimum: 20
-              maximum: 220
-              readOnly: true
         program:
           description: The program currently in use.
           oneOf:
@@ -687,8 +641,6 @@ components:
             - $ref: '#/components/schemas/Solvent'
             - $ref: '#/components/schemas/Method'
             - $ref: '#/components/schemas/AutoDest'
-            - $ref: '#/components/schemas/CloudDest'
-            - $ref: '#/components/schemas/Dry'
             - $ref: '#/components/schemas/Calibration'
             - $ref: '#/components/schemas/TightnessTest'
           discriminator:
@@ -713,10 +665,6 @@ components:
             onHold:
               type: boolean
               description: Global ON HOLD status
-              readOnly: true
-            foamActive:
-              type: boolean
-              description: foam is active.
               readOnly: true
             currentError:
               type: integer
@@ -784,49 +732,12 @@ components:
       description: AutoDest parameters.
       allOf:
         - $ref: '#/components/schemas/Program'
-    CloudDest:
-      description: CloudDest mode and its parameters.
-      allOf:
-        - $ref: '#/components/schemas/Program'
-        - type: object
-          required:
-            - mode
-          properties:
-            mode:
-              type: string
-              description: Type of program.
-              enum:
-                - fullControl
-                - endDetection
-            flaskSize:
-              description: Size of flask according to the definition in the I-300pro manual.
-              type: integer
-    Dry:
-      description: Drying parameters.
-      allOf:
-        - $ref: '#/components/schemas/Program'
-        - type: object
-          required:
-            - interval
-            - time
-          properties:
-            interval:
-              type: integer
-              description: Direction change interval time in seconds.
-              minimum: 5
-              maximum: 150
-            time:
-              type: integer
-              description: Set time value in seconds. Needs to be a multiple of 60. If it isn't it's rounded down accordingly.
-              minimum: 60
-              maximum: 34380
-              multipleOf: 60
     Calibration:
-      description: Calibration parameters.
+      description: Calibrations can't be started via OpenInterface.
       allOf:
         - $ref: '#/components/schemas/Program'
     TightnessTest:
-      description: TightnessTest parameters.
+      description: Can be pre-selected via OpenInterface but must be started using the device UI.
       allOf:
         - $ref: '#/components/schemas/Program'
     Settings:
@@ -981,18 +892,10 @@ components:
           type: object
           description: Heating related settings.
           properties:
-            maxTemperature:
-              type: number
-              description: Maximum temperature limitation in Celsius degrees.
-              enum:
-                - 95
-                - 180
-                - 220
-              readOnly: true
             stopHeatingOnFinish:
               type: boolean
               description: >-
-                Heating of heating bath stops after automatic or manual
+                Heating stops after automatic or manual
                 termination of distillation.
         cooling:
           type: object
@@ -1003,26 +906,6 @@ components:
               description: >-
                 The Recirculating Chiller automatically switches off after
                 automatic or manual termination of distillation.
-        lift:
-          type: object
-          description: Lift related settings.
-          properties:
-            depthStop:
-              type: number
-              description: Depth stop limit in millimeters.
-              minimum: 20
-              maximum: 220
-              readOnly: true
-            immerseOnStart:
-              type: boolean
-              description: >-
-                Evaporating flask is automatically immersed in the heating bath
-                when distillation is started.
-            liftOutFlaskOnFinish:
-              type: boolean
-              description: >-
-                Evaporating flask is automatically lifted out of the heating
-                bath after automatic or manual termination of distillation.
         program:
           type: object
           description: Program related settings.
