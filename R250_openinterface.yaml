@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: BUCHI R220 OpenInterface
+  title: BUCHI R250 OpenInterface
   x-logo:
     url: https://developer.buchi.digital/rotavapor/openinterface/doc/logo.png
   description: >
